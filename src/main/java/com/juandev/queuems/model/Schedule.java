@@ -24,7 +24,7 @@ public class Schedule {
     @ManyToOne()
     @Getter @Setter
     @JoinColumn(name = "user_id")
-    private UserSystem user;
+    private User user;
 
     @Getter @Setter @Column(name = "schedule_number")
     private String scheduleNumber;
