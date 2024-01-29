@@ -8,7 +8,7 @@ import lombok.ToString;
 import java.util.List;
 
 @Entity
-@Table(name = "users_system")
+@Table(name = "users")
 @ToString
 public class User {
 
@@ -34,6 +34,9 @@ public class User {
 
     @Getter @Setter @Column(name = "username")
     private String username;
+
+    @Getter @Setter @Column(name = "active")
+    private boolean active;
 
     @OneToMany(mappedBy = "user")
     @Getter @Setter

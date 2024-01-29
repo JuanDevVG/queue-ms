@@ -29,7 +29,7 @@ public class Patient {
     private Service service;
 
     @OneToOne
-    @JoinColumn(name = "patient")
+    @JoinColumn(name = "id")
     @Getter @Setter
     private Schedule schedule;
 }
