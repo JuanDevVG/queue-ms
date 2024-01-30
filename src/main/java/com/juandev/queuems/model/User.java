@@ -12,10 +12,10 @@ import java.util.List;
 @ToString
 public class User {
 
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     @Getter @Setter @Column(name = "id")
-    private int userId;
+    private Integer userId;
 
     @Getter @Setter @Column(name = "identity_card")
     private String identityCard;

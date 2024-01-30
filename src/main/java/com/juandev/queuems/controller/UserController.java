@@ -56,4 +56,11 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<User> updateUser(@RequestBody User user){
+        User userUpdate = userService.updateUser(user);
+        return new ResponseEntity<>(userUpdate, HttpStatus.OK);
+    }
+
 }

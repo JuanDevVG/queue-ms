@@ -2,6 +2,7 @@ package com.juandev.queuems.service;
 
 import com.juandev.queuems.model.User;
 import com.juandev.queuems.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,5 +38,10 @@ public class UserService {
         } else {
             throw new IllegalArgumentException();
         }
+    }
+
+    @Transactional
+    public User updateUser(User user) {
+        return userRepository.save(user);
     }
 }
