@@ -15,7 +15,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Getter @Setter @Column(name = "id")
-    private Integer userId;
+    private Long userId;
 
     @Getter @Setter @Column(name = "identity_card")
     private String identityCard;

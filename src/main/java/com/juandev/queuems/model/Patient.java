@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
-
 @Entity
 @Table(name = "patients")
 @ToString
@@ -15,7 +13,7 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter @Column(name = "id")
-    private int patientId;
+    private Long patientId;
 
     @Getter @Setter @Column(name = "identity_card")
     private String identityCard;
@@ -26,7 +24,7 @@ public class Patient {
 
     @ManyToOne
     @Getter @Setter @JoinColumn(name = "service_id")
-    private Service service;
+    private ServiceModel service;
 
     @OneToOne
     @JoinColumn(name = "id")

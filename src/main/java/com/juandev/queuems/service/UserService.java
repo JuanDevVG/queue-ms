@@ -29,6 +29,7 @@ public class UserService {
         return userRepository.findByIdentityCard(identityCard);
     }
 
+    @Transactional
     public User inactivateUser(String identityCard) {
         Optional<User> optionalUser = userRepository.findByIdentityCard(identityCard);
         if (optionalUser.isPresent()) {
