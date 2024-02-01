@@ -24,29 +24,35 @@ public class PatientService {
     @Autowired
     private ServiceRepository serviceRepository;
 
-    public Patient addPatient(NewPatientRequest request) {
+    @Transactional
+    public String addPatient(NewPatientRequest request) {
         Patient patient = new Patient();
 
         Category category = categoryRepository.findByCategoryName(request.getCategory());
         ServiceModel serviceModel = serviceRepository.findByServiceType(request.getService());
 
-        if (category != null){
-            patient.setCategory(category);
-        } else{
-            Category newCategory = new Category();
-            newCategory.setCategoryName(request.getCategory());
-            patient.setCategory(categoryRepository.save(newCategory));
-        }
-        if (serviceModel != null){
-            patient.setService(serviceModel);
-        } else{
-            ServiceModel newService = new ServiceModel();
-            newService.setServiceType(request.getService());
-            patient.setService(serviceRepository.save(newService));
-        }
+        if (patientRepository.findByIdentityCard(request.getIdentityCard()) == null){
+            if (category != null){
+                patient.setCategory(category);
+            } else{
+                Category newCategory = new Category();
+                newCategory.setCategoryName(request.getCategory());
+                patient.setCategory(categoryRepository.save(newCategory));
+            }
+            if (serviceModel != null){
+                patient.setService(serviceModel);
+            } else{
+                ServiceModel newService = new ServiceModel();
+                newService.setServiceType(request.getService());
+                patient.setService(serviceRepository.save(newService));
+            }
 
-        patient.setIdentityCard(request.getIdentityCard());
 
-        return patientRepository.save(patient);
+            patient.setIdentityCard(request.getIdentityCard());
+            patientRepository.save(patient);
+            return "Paciente agregado correctamente";
+        } else {
+            return "Error al agregar paciente";
+        }
     }
 }

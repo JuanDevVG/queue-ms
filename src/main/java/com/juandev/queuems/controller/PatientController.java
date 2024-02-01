@@ -21,16 +21,16 @@ public class PatientController {
     private PatientService patientService;
 
     @PostMapping("/create")
-    public ResponseEntity<Patient> createPatient(@RequestBody NewPatientRequest request){
+    public ResponseEntity<String> createPatient(@RequestBody NewPatientRequest request){
         try {
             //Validar que la categoria recibida exista en el enum CategoryName Y ServiceType
             CategoryName categoryName = CategoryName.valueOf(request.getCategory().name());
             ServiceType serviceType = ServiceType.valueOf(request.getService().name());
+            patientService.addPatient(request);
 
-            Patient newPatient = patientService.addPatient(request);
-            return new ResponseEntity<>(newPatient, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
         }
 
     }
