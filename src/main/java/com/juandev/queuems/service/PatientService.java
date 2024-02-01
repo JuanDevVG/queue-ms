@@ -6,7 +6,9 @@ import com.juandev.queuems.model.ServiceModel;
 import com.juandev.queuems.repository.CategoryRepository;
 import com.juandev.queuems.repository.PatientRepository;
 import com.juandev.queuems.repository.ServiceRepository;
+import com.juandev.queuems.util.CategoryName;
 import com.juandev.queuems.util.NewPatientRequest;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,17 +24,29 @@ public class PatientService {
     @Autowired
     private ServiceRepository serviceRepository;
 
-    public Patient addPatient(NewPatientRequest newPatient) {
-        ServiceModel serviceModel = serviceRepository.findByServiceType(newPatient.getService());
-        Category category = categoryRepository.findByCategoryName(newPatient.getCategory());
+    public Patient addPatient(NewPatientRequest request) {
+        Patient patient = new Patient();
 
-        Patient patientAdd = new Patient();
+        Category category = categoryRepository.findByCategoryName(request.getCategory());
+        ServiceModel serviceModel = serviceRepository.findByServiceType(request.getService());
 
-        patientAdd.setIdentityCard(newPatient.getIdentityCard());
-        patientAdd.setService(serviceModel);
-        patientAdd.setCategory(category);
+        if (category != null){
+            patient.setCategory(category);
+        } else{
+            Category newCategory = new Category();
+            newCategory.setCategoryName(request.getCategory());
+            patient.setCategory(categoryRepository.save(newCategory));
+        }
+        if (serviceModel != null){
+            patient.setService(serviceModel);
+        } else{
+            ServiceModel newService = new ServiceModel();
+            newService.setServiceType(request.getService());
+            patient.setService(serviceRepository.save(newService));
+        }
 
-        return patientRepository.save(patientAdd);
+        patient.setIdentityCard(request.getIdentityCard());
 
+        return patientRepository.save(patient);
     }
 }

@@ -2,7 +2,9 @@ package com.juandev.queuems.controller;
 
 import com.juandev.queuems.model.Patient;
 import com.juandev.queuems.service.PatientService;
+import com.juandev.queuems.util.CategoryName;
 import com.juandev.queuems.util.NewPatientRequest;
+import com.juandev.queuems.util.ServiceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +21,17 @@ public class PatientController {
     private PatientService patientService;
 
     @PostMapping("/create")
-    public ResponseEntity<Patient> createPatient(@RequestBody NewPatientRequest newPatient){
-        Patient patientAdd = patientService.addPatient(newPatient);
-        return new ResponseEntity<>(patientAdd, HttpStatus.CREATED);
+    public ResponseEntity<Patient> createPatient(@RequestBody NewPatientRequest request){
+        try {
+            //Validar que la categoria recibida exista en el enum CategoryName Y ServiceType
+            CategoryName categoryName = CategoryName.valueOf(request.getCategory().name());
+            ServiceType serviceType = ServiceType.valueOf(request.getService().name());
+
+            Patient newPatient = patientService.addPatient(request);
+            return new ResponseEntity<>(newPatient, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
     }
 }
