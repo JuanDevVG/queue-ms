@@ -4,6 +4,7 @@ import com.juandev.queuems.model.User;
 import com.juandev.queuems.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,18 @@ public class UserService {
     private UserRepository userRepository;
 
     public User saveUser(User user) {
-        return userRepository.save(user);
+        //Validar si ya existe la identityCard en la tabla Users.
+        if (userRepository.findByIdentityCard(user.getIdentityCard()).isPresent()){
+            return null;
+        } else {
+            //Validar si ya existe el username en la tabla Users.
+            if (userRepository.findByUsername(user.getUsername()) != null){
+                return null;
+            } else {
+                //Crear usuario tabla Users
+                return userRepository.save(user);
+            }
+        }
     }
 
     public List<User> listUsers() {

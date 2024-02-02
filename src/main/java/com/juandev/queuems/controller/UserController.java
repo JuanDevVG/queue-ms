@@ -19,10 +19,13 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> createUser(@RequestBody User user){
-        User saveUser = userService.saveUser(user);
-
-        return ResponseEntity.ok("Usuario "+saveUser.getUsername()+" creado con exito");
+    public ResponseEntity<User> createUser(@RequestBody User user){
+        User newUser = userService.saveUser(user);
+        if ( newUser != null){
+            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+        }
     }
 
     @GetMapping("/get")
