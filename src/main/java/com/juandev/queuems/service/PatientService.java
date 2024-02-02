@@ -15,6 +15,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PatientService {
 
@@ -67,5 +69,9 @@ public class PatientService {
         } else {
             throw new InvalidCategoryOrServiceException("La categoría o el servicio proporcionados no coinciden con los valores esperados");
         }
+    }
+
+    public List<Patient> listPatients(){
+        return patientRepository.findAll();
     }
 }

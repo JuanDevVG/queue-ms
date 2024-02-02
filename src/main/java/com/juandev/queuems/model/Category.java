@@ -1,5 +1,6 @@
 package com.juandev.queuems.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.juandev.queuems.util.CategoryName;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,6 +25,6 @@ public class Category {
     private CategoryName categoryName;
 
     @OneToMany(mappedBy = "category")
-    @Getter @Setter
+    @Getter @Setter @JsonIgnore
     private List<Patient> patients;
 }
