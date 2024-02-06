@@ -1,21 +1,21 @@
 package com.juandev.queuems.service;
 
-import com.juandev.queuems.Exception.InvalidCategoryOrServiceException;
+import com.juandev.queuems.Exception.GetPatientNotFoundException;
 import com.juandev.queuems.Exception.ConflictIdentityCardException;
-import com.juandev.queuems.model.Category;
 import com.juandev.queuems.model.Patient;
-import com.juandev.queuems.model.ServiceModel;
 import com.juandev.queuems.repository.CategoryRepository;
 import com.juandev.queuems.repository.PatientRepository;
 import com.juandev.queuems.repository.ServiceRepository;
-import com.juandev.queuems.util.CategoryName;
-import com.juandev.queuems.util.NewPatientRequest;
-import com.juandev.queuems.util.ServiceType;
 import jakarta.transaction.Transactional;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PatientService {
@@ -23,55 +23,62 @@ public class PatientService {
     @Autowired
     private PatientRepository patientRepository;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    private ServiceRepository serviceRepository;
-
     @Transactional
-    public Patient savePatient(NewPatientRequest request) {
-        Patient patient = new Patient();
+    public Patient savePatient(Patient patient) {
 
-        //Validar que la categoria recibida exista en el enum CategoryName Y ServiceType
-        CategoryName categoryName = CategoryName.valueOf(request.getCategory().name());;
-        ServiceType serviceType = ServiceType.valueOf(request.getService().name());
-
-        if (categoryName.equals(request.getCategory()) && serviceType.equals(request.getService())) {
-
-            if (patientRepository.findByIdentityCard(request.getIdentityCard()) == null){
-
-                //Verificando que category y service existan en la base de datos
-                Category category = categoryRepository.findByCategoryName(request.getCategory());
-                ServiceModel serviceModel = serviceRepository.findByServiceType(request.getService());
-
-                if (category != null){
-                    patient.setCategory(category);
-                } else{
-                    Category newCategory = new Category();
-                    newCategory.setCategoryName(request.getCategory());
-                    patient.setCategory(categoryRepository.save(newCategory));
-                }
-                if (serviceModel != null){
-                    patient.setService(serviceModel);
-                } else{
-                    ServiceModel newService = new ServiceModel();
-                    newService.setServiceType(request.getService());
-                    patient.setService(serviceRepository.save(newService));
-                }
-
-                patient.setIdentityCard(request.getIdentityCard());
-
-                return patientRepository.save(patient);
-            } else {
-                throw new ConflictIdentityCardException("Ya existe un paciente con la identificación proporcionada");
-            }
+        if (patientRepository.findByIdentityCard(patient.getIdentityCard()).isPresent()){
+            throw new ConflictIdentityCardException("Ya existe un paciente con la identificación proporcionada");
         } else {
-            throw new InvalidCategoryOrServiceException("La categoría o el servicio proporcionados no coinciden con los valores esperados");
+            return patientRepository.save(patient);
         }
     }
 
     public List<Patient> listPatients(){
-        return patientRepository.findAll();
+        List<Patient> patients = patientRepository.findAll();
+        if (!patients.isEmpty()){
+            return patients;
+        } else {
+            throw new GetPatientNotFoundException("Aun no se encuentran pacientes en la base de datos");
+        }
+
+    }
+
+    @Transactional
+    public void updatePatient(Patient newPatient){
+        Optional<Patient> optionalPatient = patientRepository.findById(newPatient.getPatientId());
+
+        if (optionalPatient.isPresent()) {
+            Patient existingPatient = optionalPatient.get();
+            existingPatient.setIdentityCard(newPatient.getIdentityCard());
+            existingPatient.setService(newPatient.getService());
+            existingPatient.setActive(newPatient.isActive());
+            existingPatient.setCategory(newPatient.getCategory());
+
+            try {
+                patientRepository.save(existingPatient);
+            } catch (DuplicateKeyException e) {
+                // Manejo específico para violación de restricción de unicidad
+                throw new DataIntegrityViolationException("El numero de identificacion "+newPatient.getIdentityCard()+" pertenece a otro paciente registrado");
+            }
+        } else {
+            // Manejo si el paciente no existe
+            throw new GetPatientNotFoundException("El paciente no se encuentra registrado");
+        }
+
+    }
+
+    @Transactional
+    public Patient inactivatePatient(Patient patient){
+        patient.setActive(false);
+        return patientRepository.save(patient);
+    }
+
+    public Patient getByIdentityCard(String identityCard) {
+        Optional<Patient> patient = patientRepository.findByIdentityCard(identityCard);
+        if (patient.isPresent()){
+            return patient.get();
+        } else {
+            throw new GetPatientNotFoundException("El paciente con numero de identificacion "+identityCard+" no se encuentra en la base de datos");
+        }
     }
 }

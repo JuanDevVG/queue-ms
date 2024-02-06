@@ -8,26 +8,30 @@ import lombok.ToString;
 @Entity
 @Table(name = "patients")
 @ToString
+@Getter
+@Setter
 public class Patient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter @Setter @Column(name = "id")
+    @Column(name = "id")
     private Long patientId;
 
-    @Getter @Setter @Column(name = "identity_card")
+    @Column(name = "identity_card")
     private String identityCard;
 
     @ManyToOne
-    @Getter @Setter @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @ManyToOne
-    @Getter @Setter @JoinColumn(name = "service_id")
+    @JoinColumn(name = "service_id")
     private ServiceModel service;
+
+    @JoinColumn(name = "active")
+    private boolean active;
 
     @OneToOne
     @JoinColumn(name = "id")
-    @Getter @Setter
     private Schedule schedule;
 }

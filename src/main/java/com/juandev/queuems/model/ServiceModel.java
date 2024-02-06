@@ -9,20 +9,21 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "services")
 public class ServiceModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter @Setter @Column(name = "id")
+    @Column(name = "id")
     private Long serviceId;
 
     @Column(name = "service_type")
-    @Getter @Setter
-    @Enumerated(EnumType.STRING)
-    private ServiceType serviceType;
+
+    private String serviceType;
 
     @OneToMany(mappedBy = "service")
-    @Getter @Setter @JsonIgnore
+    @JsonIgnore
     private List<Patient> patients;
 }
