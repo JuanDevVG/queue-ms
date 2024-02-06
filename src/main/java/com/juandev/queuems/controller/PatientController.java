@@ -5,7 +5,6 @@ import com.juandev.queuems.Exception.ConflictIdentityCardException;
 import com.juandev.queuems.model.Patient;
 import com.juandev.queuems.service.PatientService;
 import com.juandev.queuems.util.Response;
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -38,7 +37,7 @@ public class PatientController {
     @GetMapping("/get")
     public ResponseEntity<?> getPatients(){
         try {
-            List<Patient> listPatients = patientService.listPatients();
+            List<Patient> listPatients = patientService.getAllPatients();
             return new ResponseEntity<>(listPatients, HttpStatus.OK);
         } catch (GetPatientNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

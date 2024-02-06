@@ -3,13 +3,9 @@ package com.juandev.queuems.service;
 import com.juandev.queuems.Exception.GetPatientNotFoundException;
 import com.juandev.queuems.Exception.ConflictIdentityCardException;
 import com.juandev.queuems.model.Patient;
-import com.juandev.queuems.repository.CategoryRepository;
 import com.juandev.queuems.repository.PatientRepository;
-import com.juandev.queuems.repository.ServiceRepository;
 import jakarta.transaction.Transactional;
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -33,7 +29,7 @@ public class PatientService {
         }
     }
 
-    public List<Patient> listPatients(){
+    public List<Patient> getAllPatients(){
         List<Patient> patients = patientRepository.findAll();
         if (!patients.isEmpty()){
             return patients;

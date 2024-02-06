@@ -31,7 +31,7 @@ public class UserController {
     @GetMapping("/get")
     public ResponseEntity<?> getUsers(){
         try {
-            return new ResponseEntity<>(userService.listUsers(), HttpStatus.OK);
+            return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
         } catch (GetUserNoFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

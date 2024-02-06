@@ -1,7 +1,6 @@
 package com.juandev.queuems.service;
 
 import com.juandev.queuems.Exception.GetUserNoFoundException;
-import com.juandev.queuems.Exception.InactiveUserTrue;
 import com.juandev.queuems.model.User;
 import com.juandev.queuems.repository.UserRepository;
 import com.juandev.queuems.util.Response;
@@ -34,7 +33,7 @@ public class UserService {
         }
     }
 
-    public List<User> listUsers() {
+    public List<User> getAllUsers() {
         List<User> listUsers = userRepository.findAll();
         if (!listUsers.isEmpty()){
             return listUsers;
