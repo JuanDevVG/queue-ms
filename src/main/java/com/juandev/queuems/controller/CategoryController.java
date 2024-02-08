@@ -6,6 +6,7 @@ import com.juandev.queuems.Exception.GetConflictException;
 import com.juandev.queuems.model.Category;
 import com.juandev.queuems.service.CategoryService;
 import com.juandev.queuems.util.Response;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,18 +50,6 @@ public class CategoryController {
             return new ResponseEntity<>(new Response("Se actualizo la categoria correctamente.", newCategory), HttpStatus.OK);
         } catch (GetCategoryNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (GetConflictException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-        }
-    }
-
-    @DeleteMapping("/delete/{idCategory}")
-    private ResponseEntity<?> deleteCategory(@PathVariable long idCategory){
-        try {
-            Category deletedCategory = CategoryService.deleteCategory();
-            return new ResponseEntity<>(new Response("Se elimino la categoria correctamente.", deletedCategory), HttpStatus.OK);
-        } catch (ConflictCategoryException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
 }

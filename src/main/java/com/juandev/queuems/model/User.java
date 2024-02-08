@@ -1,5 +1,6 @@
 package com.juandev.queuems.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +39,7 @@ public class User {
     @Getter @Setter @Column(name = "active")
     private boolean active;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     @Getter @Setter
     private List<Schedule> schedules;

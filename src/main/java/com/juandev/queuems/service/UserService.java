@@ -53,18 +53,7 @@ public class UserService {
     }
 
     @Transactional
-    public void inactivateUser(String identityCard) {
-        Optional<User> user = userRepository.findByIdentityCard(identityCard);
-        user.ifPresent(value -> value.setActive(false));
-        userRepository.save(user.get());
-    }
-
-    @Transactional
     public User updateUser(User user) {
-        if (userRepository.findById(user.getUserId()).isPresent()){
-            return userRepository.save(user);
-        } else {
-            throw new GetUserNoFoundException("El usuario no existe en la base de datos");
-        }
+        return userRepository.save(user);
     }
 }

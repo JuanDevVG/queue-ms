@@ -20,7 +20,6 @@ public class ServiceModel {
     private Long serviceId;
 
     @Column(name = "service_type")
-
     private String serviceType;
 
     @OneToMany(mappedBy = "service")

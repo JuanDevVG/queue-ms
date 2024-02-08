@@ -22,20 +22,19 @@ public class PatientController {
     private PatientService patientService;
 
     @PostMapping("/create")
-    public ResponseEntity<Response> createPatient(@RequestBody Patient patient){
+    public ResponseEntity<Response> createPatient(@RequestBody Patient patient) {
 
         try {
             Response response = new Response("El paciente se creo correctamente.", patientService.savePatient(patient));
             return new ResponseEntity<>(response, HttpStatus.CREATED);
-        }
-        catch (ConflictIdentityCardException e){
+        } catch (ConflictIdentityCardException e) {
             Response response = new Response(e.getMessage(), patient);
             return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
     }
 
     @GetMapping("/get")
-    public ResponseEntity<?> getPatients(){
+    public ResponseEntity<?> getPatients() {
         try {
             List<Patient> listPatients = patientService.getAllPatients();
             return new ResponseEntity<>(listPatients, HttpStatus.OK);
@@ -45,7 +44,7 @@ public class PatientController {
     }
 
     @GetMapping("/get/{identityCard}")
-    public ResponseEntity<Response> getPatientByIdentityCard (@PathVariable String identityCard){
+    public ResponseEntity<Response> getPatientByIdentityCard(@PathVariable String identityCard) {
         Patient patient = new Patient();
         try {
             patient = patientService.getByIdentityCard(identityCard);
@@ -56,19 +55,8 @@ public class PatientController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> updatePatient(@RequestBody Patient patient){
-        try {
-            patientService.updatePatient(patient);
-            return new ResponseEntity<>("Se actualizo el registro correctamente", HttpStatus.OK);
-        } catch (GetPatientNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (DataIntegrityViolationException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-        }
-    }
-
-    @PutMapping("/inactivate")
-    public ResponseEntity<Response> inactivatePatient (@RequestBody Patient patient){
-        return new ResponseEntity<>(new Response("Se inactivo el paciente correctamente.", patientService.inactivatePatient(patient)), HttpStatus.OK);
+    public ResponseEntity<Response> updatePatient(@RequestBody Patient patient) {
+        Patient updatedPatiente = patientService.updatePatient(patient);
+        return new ResponseEntity<>(new Response("Se actualizo el registro correctamente", updatedPatiente), HttpStatus.OK);
     }
 }

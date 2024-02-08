@@ -15,7 +15,7 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter
     @Column(name = "id")
-    private int scheduleId;
+    private Long scheduleId;
 
     @OneToOne()
     @Getter @Setter @JoinColumn(name = "patient_id")
@@ -36,6 +36,6 @@ public class Schedule {
     private LocalDateTime scheduleAttendanceTime;
 
     @Getter @Setter @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    private ScheduleStatus status;
+    //@Enumerated(EnumType.STRING)
+    private String status;
 }

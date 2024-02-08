@@ -7,9 +7,12 @@ import com.juandev.queuems.Exception.GetPatientNotFoundException;
 import com.juandev.queuems.model.Category;
 import com.juandev.queuems.model.Patient;
 import com.juandev.queuems.repository.CategoryRepository;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,10 +21,6 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
-
-    public Category deleteCategory() {
-        if (categoryRepository.)
-    }
 
     public Category saveCategory(Category category) {
         if (categoryRepository.existsByCategoryName(category.getCategoryName())){
@@ -42,9 +41,6 @@ public class CategoryService {
 
     public Category updateCategory(Category category) {
         if (categoryRepository.existsById(category.getCategoryId())){
-            if (categoryRepository.existsByCategoryName(category.getCategoryName())){
-                throw new GetConflictException("Ya existe una categoria registrada con nombre "+category.getCategoryName());
-            }
             return categoryRepository.save(category);
         } else {
             throw new GetCategoryNotFoundException("La categoria aun no se encuentra registrada");

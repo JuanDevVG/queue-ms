@@ -46,25 +46,8 @@ public class UserController {
         }
     }
 
-    @PutMapping("/inactivate/{identityCard}")
-    public ResponseEntity<?> inactivateUser(@PathVariable String identityCard){
-
-        try {
-            userService.inactivateUser(identityCard);
-            return new ResponseEntity<>("El usuario se inactivo correctamente", HttpStatus.OK);
-        } catch (InactiveUserTrue e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-        } catch (GetUserNoFoundException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
-
     @PutMapping("/update")
-    public ResponseEntity<?> updateUser(@RequestBody User user){
-        try {
-            return new ResponseEntity<>("Usuario modificado correctamente.", HttpStatus.OK);
-        } catch (GetUserNoFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Response> updateUser(@RequestBody User user){
+        return new ResponseEntity<>(new Response("Usuario modificado correctamente.", userService.updateUser(user)), HttpStatus.OK);
     }
 }

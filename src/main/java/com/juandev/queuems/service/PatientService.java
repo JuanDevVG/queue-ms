@@ -40,33 +40,8 @@ public class PatientService {
     }
 
     @Transactional
-    public void updatePatient(Patient newPatient){
-        Optional<Patient> optionalPatient = patientRepository.findById(newPatient.getPatientId());
-
-        if (optionalPatient.isPresent()) {
-            Patient existingPatient = optionalPatient.get();
-            existingPatient.setIdentityCard(newPatient.getIdentityCard());
-            existingPatient.setService(newPatient.getService());
-            existingPatient.setActive(newPatient.isActive());
-            existingPatient.setCategory(newPatient.getCategory());
-
-            try {
-                patientRepository.save(existingPatient);
-            } catch (DuplicateKeyException e) {
-                // Manejo específico para violación de restricción de unicidad
-                throw new DataIntegrityViolationException("El numero de identificacion "+newPatient.getIdentityCard()+" pertenece a otro paciente registrado");
-            }
-        } else {
-            // Manejo si el paciente no existe
-            throw new GetPatientNotFoundException("El paciente no se encuentra registrado");
-        }
-
-    }
-
-    @Transactional
-    public Patient inactivatePatient(Patient patient){
-        patient.setActive(false);
-        return patientRepository.save(patient);
+    public Patient updatePatient(Patient newPatient){
+        return patientRepository.save(newPatient);
     }
 
     public Patient getByIdentityCard(String identityCard) {

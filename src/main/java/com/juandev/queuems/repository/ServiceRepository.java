@@ -5,5 +5,4 @@ import com.juandev.queuems.util.ServiceType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ServiceRepository extends JpaRepository<ServiceModel, Long> {
-    public ServiceModel findByServiceType(ServiceType serviceType);
 }

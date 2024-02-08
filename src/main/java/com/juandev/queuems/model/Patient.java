@@ -1,5 +1,6 @@
 package com.juandev.queuems.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +32,7 @@ public class Patient {
     @JoinColumn(name = "active")
     private boolean active;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "id")
     private Schedule schedule;
