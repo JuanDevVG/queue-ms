@@ -32,7 +32,6 @@ public class Patient {
     @JoinColumn(name = "active")
     private boolean active;
 
-    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "id")
     private Schedule schedule;

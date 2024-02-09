@@ -26,6 +26,5 @@ public class Category {
     private boolean active;
 
     @OneToMany(mappedBy = "category")
-    @JsonIgnore
     private List<Patient> patients;
 }

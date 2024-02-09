@@ -1,7 +1,6 @@
 package com.juandev.queuems.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.juandev.queuems.util.ServiceType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +21,9 @@ public class ServiceModel {
     @Column(name = "service_type")
     private String serviceType;
 
+    @Column(name = "active")
+    private boolean active;
+
     @OneToMany(mappedBy = "service")
-    @JsonIgnore
     private List<Patient> patients;
 }

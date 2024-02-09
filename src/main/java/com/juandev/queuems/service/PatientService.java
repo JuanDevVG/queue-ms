@@ -2,6 +2,7 @@ package com.juandev.queuems.service;
 
 import com.juandev.queuems.Exception.GetPatientNotFoundException;
 import com.juandev.queuems.Exception.ConflictIdentityCardException;
+import com.juandev.queuems.dto.PatientDTO;
 import com.juandev.queuems.model.Patient;
 import com.juandev.queuems.repository.PatientRepository;
 import jakarta.transaction.Transactional;
@@ -20,12 +21,24 @@ public class PatientService {
     private PatientRepository patientRepository;
 
     @Transactional
-    public Patient savePatient(Patient patient) {
+    public Patient savePatient(PatientDTO patientDTO) {
 
-        if (patientRepository.findByIdentityCard(patient.getIdentityCard()).isPresent()){
+        if (patientRepository.findByIdentityCard(patientDTO.getIdentityCard()).isPresent()){
             throw new ConflictIdentityCardException("Ya existe un paciente con la identificación proporcionada");
         } else {
-            return patientRepository.save(patient);
+            Patient newPatient = new Patient();
+            newPatient.setIdentityCard(patientDTO.getIdentityCard());
+            newPatient.setCategory(patientDTO.getCategoryId());
+
+            // Guarda el nuevo paciente en la base de datos
+            Patient savedPatient = patientRepository.save(newPatient);
+
+            // Crea un nuevo DTO para el paciente creado y devuélvelo
+            PatientDTO createdPatientDTO = new PatientDTO();
+            createdPatientDTO.setIdentityCard(savedPatient.getIdentityCard());
+            // Puedes copiar otros campos del paciente guardado al DTO aquí
+
+            return createdPatientDTO;
         }
     }
 

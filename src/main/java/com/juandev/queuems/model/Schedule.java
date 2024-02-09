@@ -7,35 +7,35 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "schedules")
 public class Schedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter @Setter
     @Column(name = "id")
     private Long scheduleId;
 
     @OneToOne()
-    @Getter @Setter @JoinColumn(name = "patient_id")
+    @JoinColumn(name = "patient_id")
     private Patient patient;
 
     @ManyToOne()
-    @Getter @Setter
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Getter @Setter @Column(name = "schedule_number")
+    @Column(name = "schedule_number")
     private String scheduleNumber;
 
-    @Getter @Setter @Column(name = "schedule_assignment_time")
+    @Column(name = "schedule_assignment_time")
     private LocalDateTime scheduleAssignmentTime;
 
-    @Getter @Setter @Column(name = "schedule_attendance_time")
+    @Column(name = "schedule_attendance_time")
     private LocalDateTime scheduleAttendanceTime;
 
-    @Getter @Setter @Column(name = "status")
+    @Column(name = "status")
     //@Enumerated(EnumType.STRING)
     private String status;
 }

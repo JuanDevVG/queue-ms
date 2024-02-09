@@ -39,7 +39,6 @@ public class User {
     @Getter @Setter @Column(name = "active")
     private boolean active;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user")
     @Getter @Setter
     private List<Schedule> schedules;

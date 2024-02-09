@@ -3,6 +3,7 @@ package com.juandev.queuems.controller;
 import com.juandev.queuems.Exception.ConflictCategoryException;
 import com.juandev.queuems.Exception.GetCategoryNotFoundException;
 import com.juandev.queuems.Exception.GetConflictException;
+import com.juandev.queuems.dto.CategoryDTO;
 import com.juandev.queuems.model.Category;
 import com.juandev.queuems.service.CategoryService;
 import com.juandev.queuems.util.Response;
@@ -24,11 +25,11 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping("/create")
-    private ResponseEntity<Response> createCategory(@RequestBody Category category){
+    private ResponseEntity<Response> createCategory(@RequestBody CategoryDTO categoryDTO){
         try {
-            return new ResponseEntity<>(new Response("Se creo la categoria correctamente", categoryService.saveCategory(category)),HttpStatus.CREATED);
+            return new ResponseEntity<>(new Response("Se creo la categoria correctamente", categoryService.saveCategory(categoryDTO)),HttpStatus.CREATED);
         } catch (ConflictCategoryException e) {
-            return new ResponseEntity<>(new Response(e.getMessage(), category), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new Response(e.getMessage(), categoryDTO), HttpStatus.CONFLICT);
         }
 
     }
@@ -36,7 +37,7 @@ public class CategoryController {
     @GetMapping("/get")
     private ResponseEntity<?> getCategories(){
         try {
-            List<Category> categories = categoryService.getAllCategories();
+            List<CategoryDTO> categories = categoryService.getAllCategories();
             return new ResponseEntity<>(new Response("Consulta exitosa", categories), HttpStatus.OK);
         } catch (GetCategoryNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -44,9 +45,9 @@ public class CategoryController {
     }
 
     @PutMapping("/update")
-    private ResponseEntity<?> updateCategory(@RequestBody Category category){
+    private ResponseEntity<?> updateCategory(@RequestBody CategoryDTO categoryDTO){
         try {
-            Category newCategory = categoryService.updateCategory(category);
+            CategoryDTO newCategory = categoryService.updateCategory(categoryDTO);
             return new ResponseEntity<>(new Response("Se actualizo la categoria correctamente.", newCategory), HttpStatus.OK);
         } catch (GetCategoryNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

@@ -2,6 +2,7 @@ package com.juandev.queuems.controller;
 
 import com.juandev.queuems.Exception.GetPatientNotFoundException;
 import com.juandev.queuems.Exception.ConflictIdentityCardException;
+import com.juandev.queuems.dto.PatientDTO;
 import com.juandev.queuems.model.Patient;
 import com.juandev.queuems.service.PatientService;
 import com.juandev.queuems.util.Response;
@@ -22,13 +23,13 @@ public class PatientController {
     private PatientService patientService;
 
     @PostMapping("/create")
-    public ResponseEntity<Response> createPatient(@RequestBody Patient patient) {
+    public ResponseEntity<Response> createPatient(@RequestBody PatientDTO patientDTO) {
 
         try {
-            Response response = new Response("El paciente se creo correctamente.", patientService.savePatient(patient));
+            Response response = new Response("El paciente se creo correctamente.", patientService.savePatient(patientDTO));
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (ConflictIdentityCardException e) {
-            Response response = new Response(e.getMessage(), patient);
+            Response response = new Response(e.getMessage(), patientDTO);
             return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
     }
@@ -44,13 +45,12 @@ public class PatientController {
     }
 
     @GetMapping("/get/{identityCard}")
-    public ResponseEntity<Response> getPatientByIdentityCard(@PathVariable String identityCard) {
-        Patient patient = new Patient();
+    public ResponseEntity<?> getPatientByIdentityCard(@PathVariable String identityCard) {
         try {
-            patient = patientService.getByIdentityCard(identityCard);
+            Patient patient = patientService.getByIdentityCard(identityCard);
             return new ResponseEntity<>(new Response("Busqueda exitosa", patient), HttpStatus.OK);
         } catch (GetPatientNotFoundException e) {
-            return new ResponseEntity<>(new Response(e.getMessage(), patient), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
