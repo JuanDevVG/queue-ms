@@ -1,7 +1,10 @@
 package com.juandev.queuems.controller;
 
+import com.juandev.queuems.Exception.ConflictIdentityCardException;
+import com.juandev.queuems.Exception.GetPatientNotFoundException;
 import com.juandev.queuems.Exception.GetUserNoFoundException;
 import com.juandev.queuems.Exception.InactiveUserTrue;
+import com.juandev.queuems.model.Patient;
 import com.juandev.queuems.model.User;
 import com.juandev.queuems.service.UserService;
 import com.juandev.queuems.util.Response;
@@ -47,7 +50,14 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Response> updateUser(@RequestBody User user){
-        return new ResponseEntity<>(new Response("Usuario modificado correctamente.", userService.updateUser(user)), HttpStatus.OK);
+    public ResponseEntity<?> updateUser(@RequestBody User user){
+        try {
+            User updatedUser = userService.updateUser(user);
+            return new ResponseEntity<>(new Response("Se actualizo el registro correctamente", updatedUser), HttpStatus.OK);
+        } catch (GetUserNoFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (ConflictIdentityCardException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
     }
 }

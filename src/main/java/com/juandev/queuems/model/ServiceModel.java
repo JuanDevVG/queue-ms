@@ -24,6 +24,7 @@ public class ServiceModel {
     @Column(name = "active")
     private boolean active;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "service")
     private List<Patient> patients;
 }

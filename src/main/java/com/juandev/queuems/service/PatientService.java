@@ -5,6 +5,8 @@ import com.juandev.queuems.Exception.ConflictIdentityCardException;
 import com.juandev.queuems.dto.PatientDTO;
 import com.juandev.queuems.model.Patient;
 import com.juandev.queuems.repository.PatientRepository;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,24 +23,11 @@ public class PatientService {
     private PatientRepository patientRepository;
 
     @Transactional
-    public Patient savePatient(PatientDTO patientDTO) {
-
-        if (patientRepository.findByIdentityCard(patientDTO.getIdentityCard()).isPresent()){
+    public Patient savePatient(Patient patient) {
+        if (patientRepository.findByIdentityCard(patient.getIdentityCard()).isPresent()){
             throw new ConflictIdentityCardException("Ya existe un paciente con la identificación proporcionada");
         } else {
-            Patient newPatient = new Patient();
-            newPatient.setIdentityCard(patientDTO.getIdentityCard());
-            newPatient.setCategory(patientDTO.getCategoryId());
-
-            // Guarda el nuevo paciente en la base de datos
-            Patient savedPatient = patientRepository.save(newPatient);
-
-            // Crea un nuevo DTO para el paciente creado y devuélvelo
-            PatientDTO createdPatientDTO = new PatientDTO();
-            createdPatientDTO.setIdentityCard(savedPatient.getIdentityCard());
-            // Puedes copiar otros campos del paciente guardado al DTO aquí
-
-            return createdPatientDTO;
+            return patientRepository.save(patient);
         }
     }
 
@@ -54,7 +43,25 @@ public class PatientService {
 
     @Transactional
     public Patient updatePatient(Patient newPatient){
-        return patientRepository.save(newPatient);
+        Patient existingPatient = patientRepository.findById(newPatient.getPatientId())
+                .orElseThrow(() -> new GetPatientNotFoundException("El paciente con id: " + newPatient.getPatientId()+ " No se ecuentra registrado"));
+
+        // Verificar si la nueva identityCard ya está en uso por otro paciente
+        Optional<Patient> patientWithIdentityCard = patientRepository.findByIdentityCard(newPatient.getIdentityCard());
+
+        if (patientWithIdentityCard.isPresent() && !patientWithIdentityCard.get().getPatientId().equals(newPatient.getPatientId())) {
+            throw new ConflictIdentityCardException("Ya existe un paciente con numero de identidad "+newPatient.getIdentityCard());
+        }
+
+        // Actualizar los campos del paciente existente con los nuevos datos
+        existingPatient.setIdentityCard(newPatient.getIdentityCard());
+        existingPatient.setCategory(newPatient.getCategory());
+        existingPatient.setService(newPatient.getService());
+        existingPatient.setActive(newPatient.isActive());
+        existingPatient.setSchedule(newPatient.getSchedule());
+
+        // Guardar el paciente actualizado en la base de datos
+        return patientRepository.save(existingPatient);
     }
 
     public Patient getByIdentityCard(String identityCard) {

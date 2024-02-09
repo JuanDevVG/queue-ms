@@ -25,6 +25,7 @@ public class Category {
     @Column(name = "active")
     private boolean active;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category")
     private List<Patient> patients;
 }

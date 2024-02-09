@@ -23,13 +23,12 @@ public class PatientController {
     private PatientService patientService;
 
     @PostMapping("/create")
-    public ResponseEntity<Response> createPatient(@RequestBody PatientDTO patientDTO) {
-
+    public ResponseEntity<Response> createPatient(@RequestBody Patient patient) {
         try {
-            Response response = new Response("El paciente se creo correctamente.", patientService.savePatient(patientDTO));
+            Response response = new Response("El paciente se creo correctamente.", patientService.savePatient(patient));
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (ConflictIdentityCardException e) {
-            Response response = new Response(e.getMessage(), patientDTO);
+            Response response = new Response(e.getMessage(), patient);
             return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
     }
@@ -55,8 +54,15 @@ public class PatientController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Response> updatePatient(@RequestBody Patient patient) {
-        Patient updatedPatiente = patientService.updatePatient(patient);
-        return new ResponseEntity<>(new Response("Se actualizo el registro correctamente", updatedPatiente), HttpStatus.OK);
+    public ResponseEntity<?> updatePatient(@RequestBody Patient patient) {
+        try {
+            Patient updatedPatiente = patientService.updatePatient(patient);
+            return new ResponseEntity<>(new Response("Se actualizo el registro correctamente", updatedPatiente), HttpStatus.OK);
+        } catch (GetPatientNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (ConflictIdentityCardException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
+
     }
 }
