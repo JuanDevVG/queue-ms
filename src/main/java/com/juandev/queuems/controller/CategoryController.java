@@ -25,9 +25,10 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping("/create")
-    private ResponseEntity<Response> createCategory(@RequestBody CategoryDTO categoryDTO){
+    private ResponseEntity<?> createCategory(@RequestBody CategoryDTO categoryDTO){
         try {
-            return new ResponseEntity<>(new Response("Se creo la categoria correctamente", categoryService.saveCategory(categoryDTO)),HttpStatus.CREATED);
+            categoryService.saveCategory(categoryDTO);
+            return new ResponseEntity<>("Se creo el registro correctamente", HttpStatus.CREATED);
         } catch (ConflictCategoryException e) {
             return new ResponseEntity<>(new Response(e.getMessage(), categoryDTO), HttpStatus.CONFLICT);
         }
@@ -37,8 +38,8 @@ public class CategoryController {
     @GetMapping("/get")
     private ResponseEntity<?> getCategories(){
         try {
-            List<CategoryDTO> categories = categoryService.getAllCategories();
-            return new ResponseEntity<>(new Response("Consulta exitosa", categories), HttpStatus.OK);
+            List<CategoryDTO> categoryDTOList = categoryService.getAllCategories();
+            return new ResponseEntity<>(new Response("Consulta exitosa", categoryDTOList), HttpStatus.OK);
         } catch (GetCategoryNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -47,8 +48,8 @@ public class CategoryController {
     @PutMapping("/update")
     private ResponseEntity<?> updateCategory(@RequestBody CategoryDTO categoryDTO){
         try {
-            CategoryDTO newCategory = categoryService.updateCategory(categoryDTO);
-            return new ResponseEntity<>(new Response("Se actualizo la categoria correctamente.", newCategory), HttpStatus.OK);
+            categoryService.updateCategory(categoryDTO);
+            return new ResponseEntity<>("Se actualizo la categoria correctamente.", HttpStatus.OK);
         } catch (GetCategoryNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

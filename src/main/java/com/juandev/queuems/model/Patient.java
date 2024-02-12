@@ -2,10 +2,11 @@ package com.juandev.queuems.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "patients")
 @ToString
@@ -20,6 +21,12 @@ public class Patient {
 
     @Column(name = "identity_card")
     private String identityCard;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "lastname")
+    private String lastname;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

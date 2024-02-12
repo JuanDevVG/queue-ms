@@ -24,37 +24,37 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public CategoryDTO saveCategory(CategoryDTO categoryDTO) {
+    public void saveCategory(CategoryDTO categoryDTO) {
         if (categoryRepository.existsByCategoryName(categoryDTO.getCategoryName())){
             throw new ConflictCategoryException("La categoria "+categoryDTO.getCategoryName()+" ya se encuentra creada");
         } else {
-            Category newCategory = new Category();
 
-            newCategory.setCategoryName(categoryDTO.getCategoryName());
-            newCategory.setActive(categoryDTO.isActive());
-
-            Category createdCategory = categoryRepository.save(newCategory);
-
-            CategoryDTO createdCategoryDto = new CategoryDTO();
-            createdCategoryDto.setCategoryId(createdCategory.getCategoryId());
-            createdCategoryDto.setCategoryName(createdCategory.getCategoryName());
-            createdCategoryDto.setActive(createdCategoryDto.isActive());
-
-            return createdCategoryDto;
+            //Mapear el CategoryDTO en una entidad Category
+            Category newCategory = Category.builder()
+                            .categoryName(categoryDTO.getCategoryName())
+                            .active(categoryDTO.isActive())
+                            .build();
+            //Guardar la Categoria en la base de datos
+            categoryRepository.save(newCategory);
         }
     }
 
     public List<CategoryDTO> getAllCategories() {
+        //Obtener lista de categorias de la base de datos
         List<Category> categories = categoryRepository.findAll();
 
         if (!categories.isEmpty()){
             List<CategoryDTO> categoryDTOList = new ArrayList<>();
+
             for (Category category : categories) {
-                CategoryDTO categoryDTO = new CategoryDTO();
-                categoryDTO.setCategoryId(category.getCategoryId());
-                categoryDTO.setCategoryName(category.getCategoryName());
-                categoryDTO.setActive(category.isActive());
-                // Agrega más campos según sea necesario
+
+                //Mapea datos de categories en lista de CategoryDTO
+                CategoryDTO categoryDTO = CategoryDTO.builder()
+                                    .categoryId(category.getCategoryId())
+                                    .categoryName(category.getCategoryName())
+                                    .active(category.isActive())
+                                    .build();
+                //Agrega la CategoryDTO creada a la lista de CategoryDTOList
                 categoryDTOList.add(categoryDTO);
             }
             return categoryDTOList;
@@ -63,24 +63,16 @@ public class CategoryService {
         }
     }
 
-    public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
+    public void updateCategory(CategoryDTO categoryDTO) {
         Optional<Category> categoryOptional = categoryRepository.findById(categoryDTO.getCategoryId());
 
         if (categoryOptional.isPresent()){
-            Category existingCategory = categoryOptional.get();
+            //Asignar datos nuevos de CategoryDTO a category
+            Category category = categoryOptional.get();
+            category.setCategoryName(categoryDTO.getCategoryName());
+            category.setActive(categoryDTO.isActive());
 
-            existingCategory.setCategoryName(categoryDTO.getCategoryName());
-            existingCategory.setActive(categoryDTO.isActive());
-
-            Category updatedCategory = categoryRepository.save(existingCategory);
-
-            CategoryDTO updatedCategoryDTO = new CategoryDTO();
-
-            updatedCategoryDTO.setCategoryId(updatedCategory.getCategoryId());
-            updatedCategoryDTO.setCategoryName(updatedCategory.getCategoryName());
-            updatedCategoryDTO.setActive(updatedCategory.isActive());
-
-            return updatedCategoryDTO;
+            categoryRepository.save(category);
         } else {
             throw new GetCategoryNotFoundException("La categoria aun no se encuentra registrada");
         }

@@ -13,6 +13,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,18 +24,43 @@ public class PatientService {
     private PatientRepository patientRepository;
 
     @Transactional
-    public Patient savePatient(Patient patient) {
-        if (patientRepository.findByIdentityCard(patient.getIdentityCard()).isPresent()){
+    public void savePatient(PatientDTO patientDTO) {
+        Optional<Patient> optionalPatient = patientRepository.findByIdentityCard(patientDTO.getIdentityCard());
+
+        if (optionalPatient.isPresent()){
             throw new ConflictIdentityCardException("Ya existe un paciente con la identificación proporcionada");
         } else {
-            return patientRepository.save(patient);
+            Patient patient = Patient.builder()
+                    .identityCard(patientDTO.getIdentityCard())
+                    .name(patientDTO.getName())
+                    .lastname(patientDTO.getLastname())
+                    .service(patientDTO.getService())
+                    .category(patientDTO.getCategory())
+                    .active(patientDTO.isActive())
+                    .build();
+            patientRepository.save(patient);
         }
     }
 
-    public List<Patient> getAllPatients(){
+    public List<PatientDTO> getAllPatients(){
         List<Patient> patients = patientRepository.findAll();
         if (!patients.isEmpty()){
-            return patients;
+            List<PatientDTO> patientDTOList = new ArrayList<>();
+
+            for (Patient patient: patients){
+                PatientDTO patientDTO = PatientDTO.builder()
+                                .patientId(patient.getPatientId())
+                                .identityCard(patient.getIdentityCard())
+                                .name(patient.getName())
+                                .lastname(patient.getLastname())
+                                .service(patient.getService())
+                                .category(patient.getCategory())
+                                .active(patient.isActive())
+                                .build();
+
+                patientDTOList.add(patientDTO);
+            }
+            return patientDTOList;
         } else {
             throw new GetPatientNotFoundException("Aun no se encuentran pacientes en la base de datos");
         }
@@ -42,34 +68,42 @@ public class PatientService {
     }
 
     @Transactional
-    public Patient updatePatient(Patient newPatient){
-        Patient existingPatient = patientRepository.findById(newPatient.getPatientId())
-                .orElseThrow(() -> new GetPatientNotFoundException("El paciente con id: " + newPatient.getPatientId()+ " No se ecuentra registrado"));
+    public void updatePatient(PatientDTO patientDTO){
+        //Verifica que el paciente se encuentre en la base de datos
+        Patient patient = patientRepository.findById(patientDTO.getPatientId())
+                .orElseThrow(() -> new GetPatientNotFoundException("El paciente con id: " + patientDTO.getPatientId()+ " No se ecuentra registrado"));
+
+        Optional<Patient> patientWithIdentityCard = patientRepository.findByIdentityCard(patientDTO.getIdentityCard());
 
         // Verificar si la nueva identityCard ya está en uso por otro paciente
-        Optional<Patient> patientWithIdentityCard = patientRepository.findByIdentityCard(newPatient.getIdentityCard());
+        if (patientWithIdentityCard.isPresent() && !patientWithIdentityCard.get().getPatientId().equals(patientDTO.getPatientId())) {
+            throw new ConflictIdentityCardException("Ya existe un paciente con numero de identidad "+patientDTO.getIdentityCard());
+        } else {
+            //Asignar datos nuevos al paciente
+            patient.setIdentityCard(patientDTO.getIdentityCard());
+            patient.setName(patientDTO.getName());
+            patient.setLastname(patientDTO.getLastname());
+            patient.setService(patientDTO.getService());
+            patient.setCategory(patientDTO.getCategory());
+            patient.setActive(patientDTO.isActive());
 
-        if (patientWithIdentityCard.isPresent() && !patientWithIdentityCard.get().getPatientId().equals(newPatient.getPatientId())) {
-            throw new ConflictIdentityCardException("Ya existe un paciente con numero de identidad "+newPatient.getIdentityCard());
+            patientRepository.save(patient);
         }
-
-        // Actualizar los campos del paciente existente con los nuevos datos
-        existingPatient.setIdentityCard(newPatient.getIdentityCard());
-        existingPatient.setCategory(newPatient.getCategory());
-        existingPatient.setService(newPatient.getService());
-        existingPatient.setActive(newPatient.isActive());
-        existingPatient.setSchedule(newPatient.getSchedule());
-
-        // Guardar el paciente actualizado en la base de datos
-        return patientRepository.save(existingPatient);
     }
 
-    public Patient getByIdentityCard(String identityCard) {
-        Optional<Patient> patient = patientRepository.findByIdentityCard(identityCard);
-        if (patient.isPresent()){
-            return patient.get();
-        } else {
-            throw new GetPatientNotFoundException("El paciente con numero de identificacion "+identityCard+" no se encuentra en la base de datos");
-        }
+    public PatientDTO getByIdentityCard(String identityCard) {
+        //Verifica que el paciente se encuentre en la base de datos
+        Patient patient = patientRepository.findByIdentityCard(identityCard)
+                .orElseThrow(() -> new GetPatientNotFoundException("El paciente con id: " + identityCard+ " No se ecuentra registrado"));
+        //Devuelve una instancia de PatientDTO con los datos del paciente
+        return PatientDTO.builder()
+                        .patientId(patient.getPatientId())
+                        .identityCard(patient.getIdentityCard())
+                        .name(patient.getName())
+                        .lastname(patient.getLastname())
+                        .service(patient.getService())
+                        .category(patient.getCategory())
+                        .active(patient.isActive())
+                        .build();
     }
 }

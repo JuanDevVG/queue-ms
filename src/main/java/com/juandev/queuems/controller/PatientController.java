@@ -23,21 +23,20 @@ public class PatientController {
     private PatientService patientService;
 
     @PostMapping("/create")
-    public ResponseEntity<Response> createPatient(@RequestBody Patient patient) {
+    public ResponseEntity<?> createPatient(@RequestBody PatientDTO patientDTO) {
         try {
-            Response response = new Response("El paciente se creo correctamente.", patientService.savePatient(patient));
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            patientService.savePatient(patientDTO);
+            return new ResponseEntity<>("El paciente se creo correctamente.", HttpStatus.CREATED);
         } catch (ConflictIdentityCardException e) {
-            Response response = new Response(e.getMessage(), patient);
-            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
 
     @GetMapping("/get")
     public ResponseEntity<?> getPatients() {
         try {
-            List<Patient> listPatients = patientService.getAllPatients();
-            return new ResponseEntity<>(listPatients, HttpStatus.OK);
+            List<PatientDTO> patientDTOList = patientService.getAllPatients();
+            return new ResponseEntity<>(patientDTOList, HttpStatus.OK);
         } catch (GetPatientNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -46,18 +45,18 @@ public class PatientController {
     @GetMapping("/get/{identityCard}")
     public ResponseEntity<?> getPatientByIdentityCard(@PathVariable String identityCard) {
         try {
-            Patient patient = patientService.getByIdentityCard(identityCard);
-            return new ResponseEntity<>(new Response("Busqueda exitosa", patient), HttpStatus.OK);
+            PatientDTO patientDTO = patientService.getByIdentityCard(identityCard);
+            return new ResponseEntity<>(new Response("Busqueda exitosa", patientDTO), HttpStatus.OK);
         } catch (GetPatientNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updatePatient(@RequestBody Patient patient) {
+    public ResponseEntity<?> updatePatient(@RequestBody PatientDTO patientDTO) {
         try {
-            Patient updatedPatiente = patientService.updatePatient(patient);
-            return new ResponseEntity<>(new Response("Se actualizo el registro correctamente", updatedPatiente), HttpStatus.OK);
+            patientService.updatePatient(patientDTO);
+            return new ResponseEntity<>("Se actualizo el registro correctamente", HttpStatus.OK);
         } catch (GetPatientNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (ConflictIdentityCardException e) {

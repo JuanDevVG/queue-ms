@@ -1,12 +1,14 @@
 package com.juandev.queuems.model;
 
-import com.juandev.queuems.util.ScheduleStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Getter
 @Setter
 @Entity
@@ -29,11 +31,11 @@ public class Schedule {
     @Column(name = "schedule_number")
     private String scheduleNumber;
 
-    @Column(name = "schedule_assignment_time")
-    private LocalDateTime scheduleAssignmentTime;
+    @Column(name = "schedule_assignment_date")
+    private LocalDateTime scheduleAssignmentDate;
 
-    @Column(name = "schedule_attendance_time")
-    private LocalDateTime scheduleAttendanceTime;
+    @Column(name = "schedule_attendance_date")
+    private LocalDateTime scheduleAttendanceDate;
 
     @Column(name = "status")
     //@Enumerated(EnumType.STRING)

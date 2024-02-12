@@ -1,14 +1,21 @@
 package com.juandev.queuems.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.juandev.queuems.model.Category;
+import com.juandev.queuems.model.ServiceModel;
+import lombok.*;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Getter
 @Setter
 public class PatientDTO {
     private Long patientId;
     private String identityCard;
-    private Long categoryId;
-    private Long serviceId;
+    private String name;
+    private String lastname;
+    private Category category;
+    private ServiceModel service;
     private boolean active;
 }

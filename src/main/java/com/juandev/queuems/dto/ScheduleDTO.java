@@ -1,18 +1,21 @@
 package com.juandev.queuems.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.juandev.queuems.model.Patient;
+import com.juandev.queuems.model.User;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ScheduleDTO {
     private Long scheduleId;
-    private Long patientId;
-    private Long userId;
+    private Patient patient;
+    private User user;
     private String scheduleNumber;
-    private LocalDateTime scheduleAssignmentTime;
-    private LocalDateTime scheduleAttendanceTime;
+    private LocalDateTime scheduleAssignmentDate;
+    private LocalDateTime scheduleAttendanceDate;
     private String status;
 }
