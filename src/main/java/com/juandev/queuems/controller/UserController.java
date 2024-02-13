@@ -1,9 +1,7 @@
 package com.juandev.queuems.controller;
 
-import com.juandev.queuems.Exception.ConflictIdentityCardException;
-import com.juandev.queuems.Exception.GetPatientNotFoundException;
-import com.juandev.queuems.Exception.GetUserNoFoundException;
-import com.juandev.queuems.Exception.InactiveUserTrue;
+import com.juandev.queuems.Exception.*;
+import com.juandev.queuems.dto.UserDTO;
 import com.juandev.queuems.model.Patient;
 import com.juandev.queuems.model.User;
 import com.juandev.queuems.service.UserService;
@@ -22,12 +20,12 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity<Response> createUser(@RequestBody User user){
-        Response response = userService.saveUser(user);
-        if ( response.getNewObject() != null){
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO){
+        try {
+            userService.saveUser(userDTO);
+            return new ResponseEntity<>("El usuario se creo correctamente", HttpStatus.CREATED);
+        } catch (ConflictIdentityCardException | ConflictUsernameException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
 
@@ -50,13 +48,13 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateUser(@RequestBody User user){
+    public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO){
         try {
-            User updatedUser = userService.updateUser(user);
-            return new ResponseEntity<>(new Response("Se actualizo el registro correctamente", updatedUser), HttpStatus.OK);
+            userService.updateUser(userDTO);
+            return new ResponseEntity<>("Se actualizo el registro correctamente", HttpStatus.OK);
         } catch (GetUserNoFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (ConflictIdentityCardException e) {
+        } catch (ConflictIdentityCardException | ConflictUsernameException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }

@@ -2,12 +2,14 @@ package com.juandev.queuems.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
 @Entity
 @Table(name = "users")
 @ToString
@@ -15,33 +17,35 @@ public class User {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Getter @Setter @Column(name = "id")
+    @Column(name = "id")
     private Long userId;
 
-    @Getter @Setter @Column(name = "identity_card")
+    @Column(name = "identity_card")
     private String identityCard;
 
-    @Getter @Setter @Column(name = "first_name")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Getter @Setter @Column(name = "last_name")
+    @Column(name = "last_name")
     private String lastName;
 
-    @Getter @Setter @Column(name = "email")
+    @Column(name = "email")
     private String email;
 
-    @Getter @Setter @Column(name = "password")
+    @Column(name = "password")
     private String password;
 
-    @Getter @Setter @Column(name = "username")
+    @Column(name = "username")
     private String username;
 
-    @Getter @Setter @Column(name = "active")
+    @Column(name = "active")
     private boolean active;
+
+    @Column(name = "role")
+    private String role;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
-    @Getter @Setter
     private List<Schedule> schedules;
 
 }
