@@ -32,7 +32,7 @@ public class UserService {
             throw new ConflictIdentityCardException("El usuario con numero de identificacion "+userDTO.getIdentityCard()+" ya se encuentra registrado");
         } else {
             //Validar si ya existe el username en la tabla Users.
-            if (userRepository.findByUsername(userDTO.getUsername()) != null){
+            if (userRepository.findByUsername(userDTO.getUsername()).isPresent()){
                 throw new ConflictUsernameException("El nombre de usuario "+userDTO.getUsername()+" ya esta en uso.");
             } else {
                 //Crear usuario tabla Users
@@ -108,8 +108,8 @@ public class UserService {
         if (userIdentityCard.isPresent() && !userIdentityCard.get().getUserId().equals(user.getUserId())) {
             throw new ConflictIdentityCardException("Ya existe un usuario con numero de identidad "+user.getIdentityCard());
         }
-        User userUsername = userRepository.findByUsername(userDTO.getUsername());
-        if (userUsername != null && !userUsername.getUsername().equals(userDTO.getUsername())) {
+        Optional<User> OptionalUserByUsername = userRepository.findByUsername(userDTO.getUsername());
+        if (OptionalUserByUsername.isPresent() && !OptionalUserByUsername.get().getUsername().equals(userDTO.getUsername())) {
             throw new ConflictUsernameException("El nombre de usuario " + userDTO.getUsername() + " ya esta en uso.");
         }
 
