@@ -19,8 +19,9 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request) {
         User user =  User.builder()
+                .identityCard(request.getIdentityCard())
                 .username(request.getUsername())
-                .email(request.getIdentityCard())
+                .email(request.getEmail())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .password(request.getPassword())
@@ -29,6 +30,7 @@ public class AuthService {
                 .build();
 
         userRepository.save(user);
+
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
                 .build();
