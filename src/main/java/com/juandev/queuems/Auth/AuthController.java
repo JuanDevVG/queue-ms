@@ -1,5 +1,6 @@
 package com.juandev.queuems.Auth;
 
+import com.juandev.queuems.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<AuthResponse> login(@RequestBody RegisterRequest request)
+    public ResponseEntity<AuthResponse> login(@RequestBody UserDTO request)
     {
         return ResponseEntity.ok(authService.register(request));
     }

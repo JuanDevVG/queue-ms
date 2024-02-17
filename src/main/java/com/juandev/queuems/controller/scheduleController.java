@@ -32,6 +32,16 @@ public class scheduleController {
 
     }
 
+    @GetMapping("/get/{status}")
+    private ResponseEntity<?> getScheduleByStatus (@PathVariable String status){
+        try {
+            return new ResponseEntity<>(scheduleService.getScheduleByStatus(status), HttpStatus.OK);
+        } catch (RecordGetNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+
+    }
+
     @PutMapping("/update")
     private ResponseEntity<?> updateSchedule (@RequestBody ScheduleDTO scheduleDTO){
         try {

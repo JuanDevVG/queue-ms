@@ -1,6 +1,7 @@
 package com.juandev.queuems.Auth;
 
 import com.juandev.queuems.Jwt.JwtService;
+import com.juandev.queuems.dto.UserDTO;
 import com.juandev.queuems.model.User;
 import com.juandev.queuems.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class AuthService {
                 .build();
     }
 
-    public AuthResponse register(RegisterRequest request) {
+    public AuthResponse register(UserDTO request) {
         User user =  User.builder()
                 .identityCard(request.getIdentityCard())
                 .username(request.getUsername())

@@ -80,4 +80,29 @@ public class ScheduleService {
 
         scheduleRepository.save(schedule);
     }
+
+    public List<ScheduleDTO> getScheduleByStatus (String status){
+        List<Schedule> schedules = scheduleRepository.findByStatus(status).orElseThrow();
+
+        List<ScheduleDTO> scheduleDTOList = new ArrayList<>();
+
+        for (Schedule schedule : schedules) {
+
+            //Mapea datos de schedules en lista de ScheduleDTO
+            ScheduleDTO scheduleDTO = ScheduleDTO.builder()
+                    .scheduleId(schedule.getScheduleId())
+                    .patient(schedule.getPatient())
+                    .user(schedule.getUser())
+                    .scheduleNumber(schedule.getScheduleNumber())
+                    .scheduleAssignmentDate(schedule.getScheduleAssignmentDate())
+                    .scheduleAttendanceDate(schedule.getScheduleAttendanceDate())
+                    .status(schedule.getStatus())
+                    .build();
+
+            //Agrega la CategoryDTO creada a la lista de CategoryDTOList
+            scheduleDTOList.add(scheduleDTO);
+
+        }
+        return scheduleDTOList;
+    }
 }
