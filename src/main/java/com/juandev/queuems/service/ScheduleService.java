@@ -1,14 +1,7 @@
 package com.juandev.queuems.service;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.juandev.queuems.Exception.ConflictIdentityCardException;
-import com.juandev.queuems.Exception.GetCategoryNotFoundException;
-import com.juandev.queuems.Exception.GetPatientNotFoundException;
 import com.juandev.queuems.Exception.RecordGetNotFoundException;
-import com.juandev.queuems.dto.CategoryDTO;
 import com.juandev.queuems.dto.ScheduleDTO;
-import com.juandev.queuems.model.Category;
-import com.juandev.queuems.model.Patient;
 import com.juandev.queuems.model.Schedule;
 import com.juandev.queuems.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service

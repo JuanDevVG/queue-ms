@@ -3,14 +3,11 @@ package com.juandev.queuems.controller;
 import com.juandev.queuems.Exception.GetPatientNotFoundException;
 import com.juandev.queuems.Exception.ConflictIdentityCardException;
 import com.juandev.queuems.dto.PatientDTO;
-import com.juandev.queuems.model.Patient;
 import com.juandev.queuems.service.PatientService;
 import com.juandev.queuems.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

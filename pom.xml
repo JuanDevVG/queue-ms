@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.juandev</groupId>
-	<artifactId>queue-ms</artifactId>
+	<artifactId>queuems-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>queue-ms</name>
 	<description>Aplicacion web para asignacion de turnos digitales</description>

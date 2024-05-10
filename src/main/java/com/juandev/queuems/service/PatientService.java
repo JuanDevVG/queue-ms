@@ -5,12 +5,8 @@ import com.juandev.queuems.Exception.ConflictIdentityCardException;
 import com.juandev.queuems.dto.PatientDTO;
 import com.juandev.queuems.model.Patient;
 import com.juandev.queuems.repository.PatientRepository;
-import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

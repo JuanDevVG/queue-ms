@@ -2,7 +2,6 @@ package com.juandev.queuems.repository;
 
 
 import com.juandev.queuems.model.Patient;
-import com.juandev.queuems.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

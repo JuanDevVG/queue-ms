@@ -30,6 +30,11 @@ public class SecurityConfig {
                             .requestMatchers("/auth/**").permitAll()//Permite endpoint que inician con /auth
                             .anyRequest().authenticated()
             )
+            .logout(logout ->
+                    logout
+                            .logoutUrl("/logout")
+                            .permitAll()
+            )
             .sessionManagement(sessionManager ->
                     sessionManager
                             .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

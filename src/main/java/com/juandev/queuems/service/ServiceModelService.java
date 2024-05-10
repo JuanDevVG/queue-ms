@@ -2,9 +2,7 @@ package com.juandev.queuems.service;
 
 import com.juandev.queuems.Exception.ConflictRecordException;
 import com.juandev.queuems.Exception.RecordGetNotFoundException;
-import com.juandev.queuems.dto.ScheduleDTO;
 import com.juandev.queuems.dto.ServiceDTO;
-import com.juandev.queuems.model.Schedule;
 import com.juandev.queuems.model.ServiceModel;
 import com.juandev.queuems.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;

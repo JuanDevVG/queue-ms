@@ -2,18 +2,12 @@ package com.juandev.queuems.service;
 
 import com.juandev.queuems.Exception.ConflictCategoryException;
 import com.juandev.queuems.Exception.GetCategoryNotFoundException;
-import com.juandev.queuems.Exception.GetConflictException;
-import com.juandev.queuems.Exception.GetPatientNotFoundException;
 import com.juandev.queuems.dto.CategoryDTO;
 import com.juandev.queuems.model.Category;
-import com.juandev.queuems.model.Patient;
 import com.juandev.queuems.repository.CategoryRepository;
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

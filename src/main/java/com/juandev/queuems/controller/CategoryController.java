@@ -2,16 +2,12 @@ package com.juandev.queuems.controller;
 
 import com.juandev.queuems.Exception.ConflictCategoryException;
 import com.juandev.queuems.Exception.GetCategoryNotFoundException;
-import com.juandev.queuems.Exception.GetConflictException;
 import com.juandev.queuems.dto.CategoryDTO;
-import com.juandev.queuems.model.Category;
 import com.juandev.queuems.service.CategoryService;
 import com.juandev.queuems.util.Response;
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

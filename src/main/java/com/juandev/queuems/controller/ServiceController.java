@@ -3,16 +3,11 @@ package com.juandev.queuems.controller;
 import com.juandev.queuems.Exception.ConflictRecordException;
 import com.juandev.queuems.Exception.RecordGetNotFoundException;
 import com.juandev.queuems.dto.ServiceDTO;
-import com.juandev.queuems.model.ServiceModel;
 import com.juandev.queuems.service.ServiceModelService;
-import com.juandev.queuems.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/service")
