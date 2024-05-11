@@ -16,6 +16,5 @@ public class PatientDTO {
     private String name;
     private String lastname;
     private Category category;
-    private ServiceModel service;
     private boolean active;
 }

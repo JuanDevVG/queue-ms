@@ -39,4 +39,8 @@ public class Schedule {
     @Column(name = "status")
     //@Enumerated(EnumType.STRING)
     private String status;
+
+    @ManyToOne
+    @JoinColumn(name = "service_id")
+    private ServiceModel service;
 }

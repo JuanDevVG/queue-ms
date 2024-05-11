@@ -1,6 +1,7 @@
 package com.juandev.queuems.dto;
 
 import com.juandev.queuems.model.Patient;
+import com.juandev.queuems.model.ServiceModel;
 import com.juandev.queuems.model.User;
 import lombok.*;
 
@@ -18,4 +19,5 @@ public class ScheduleDTO {
     private LocalDateTime scheduleAssignmentDate;
     private LocalDateTime scheduleAttendanceDate;
     private String status;
+    private ServiceModel service;
 }

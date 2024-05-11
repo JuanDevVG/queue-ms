@@ -26,6 +26,7 @@ public class ScheduleService {
                         .status(scheduleDTO.getStatus())
                         .scheduleAssignmentDate(scheduleDTO.getScheduleAssignmentDate())
                         .scheduleAttendanceDate(scheduleDTO.getScheduleAttendanceDate())
+                        .service(scheduleDTO.getService())
                         .build();
 
         scheduleRepository.save(newSchedule);
@@ -48,6 +49,7 @@ public class ScheduleService {
                                 .scheduleAssignmentDate(schedule.getScheduleAssignmentDate())
                                 .scheduleAttendanceDate(schedule.getScheduleAttendanceDate())
                                 .status(schedule.getStatus())
+                                .service(schedule.getService())
                                 .build();
 
                 //Agrega la CategoryDTO creada a la lista de CategoryDTOList

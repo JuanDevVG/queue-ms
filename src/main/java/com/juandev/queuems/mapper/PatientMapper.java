@@ -11,12 +11,10 @@ public interface PatientMapper {
     PatientMapper INSTANCE = Mappers.getMapper(PatientMapper.class);
 
     @Mapping(target = "category", source = "categoryId")
-    @Mapping(target = "service", source = "serviceId")
     @Mapping(target = "schedule", source = "scheduleId")
     Patient toEntity(PatientDTO dto);
 
     @Mapping(target = "categoryId", source = "category.categoryId")
-    @Mapping(target = "serviceId", source = "service.serviceId")
     @Mapping(target = "scheduleId", source = "schedule.scheduleId")
     PatientDTO toDTO(Patient entity);
 }

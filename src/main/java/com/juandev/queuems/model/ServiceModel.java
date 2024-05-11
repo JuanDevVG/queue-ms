@@ -27,5 +27,5 @@ public class ServiceModel {
 
     @JsonIgnore
     @OneToMany(mappedBy = "service")
-    private List<Patient> patients;
+    private List<Schedule> schedules;
 }

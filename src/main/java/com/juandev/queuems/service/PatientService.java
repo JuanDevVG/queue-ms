@@ -30,7 +30,6 @@ public class PatientService {
                     .identityCard(patientDTO.getIdentityCard())
                     .name(patientDTO.getName())
                     .lastname(patientDTO.getLastname())
-                    .service(patientDTO.getService())
                     .category(patientDTO.getCategory())
                     .active(patientDTO.isActive())
                     .build();
@@ -49,7 +48,6 @@ public class PatientService {
                                 .identityCard(patient.getIdentityCard())
                                 .name(patient.getName())
                                 .lastname(patient.getLastname())
-                                .service(patient.getService())
                                 .category(patient.getCategory())
                                 .active(patient.isActive())
                                 .build();
@@ -79,7 +77,6 @@ public class PatientService {
             patient.setIdentityCard(patientDTO.getIdentityCard());
             patient.setName(patientDTO.getName());
             patient.setLastname(patientDTO.getLastname());
-            patient.setService(patientDTO.getService());
             patient.setCategory(patientDTO.getCategory());
             patient.setActive(patientDTO.isActive());
 
@@ -97,7 +94,6 @@ public class PatientService {
                         .identityCard(patient.getIdentityCard())
                         .name(patient.getName())
                         .lastname(patient.getLastname())
-                        .service(patient.getService())
                         .category(patient.getCategory())
                         .active(patient.isActive())
                         .build();

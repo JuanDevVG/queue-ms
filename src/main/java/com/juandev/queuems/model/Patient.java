@@ -32,10 +32,6 @@ public class Patient {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "service_id")
-    private ServiceModel service;
-
     @JoinColumn(name = "active")
     private boolean active;
 
