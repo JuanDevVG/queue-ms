@@ -23,6 +23,9 @@ public class Category {
     @Column(name = "category_name")
     private String categoryName;
 
+    @Column(name = "category_description")
+    private String categoryDescription;
+
     @Column(name = "active")
     private boolean active;
 

@@ -27,6 +27,7 @@ public class CategoryService {
             Category newCategory = Category.builder()
                             .categoryName(categoryDTO.getCategoryName())
                             .active(categoryDTO.isActive())
+                            .categoryDescription(categoryDTO.getCategoryDescription())
                             .build();
             //Guardar la Categoria en la base de datos
             categoryRepository.save(newCategory);
@@ -46,6 +47,7 @@ public class CategoryService {
                 CategoryDTO categoryDTO = CategoryDTO.builder()
                                     .categoryId(category.getCategoryId())
                                     .categoryName(category.getCategoryName())
+                                    .categoryDescription(category.getCategoryDescription())
                                     .active(category.isActive())
                                     .build();
                 //Agrega la CategoryDTO creada a la lista de CategoryDTOList
